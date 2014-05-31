@@ -1,0 +1,30 @@
+{
+  "name": "express-rest-generate",
+  "version": "0.0.0",
+  "description": "generate REST routes from controllers for express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Kroid/express-rest-generate.git"
+  },
+  "keywords": [
+    "rest",
+    "restful",
+    "crud",
+    "express",
+    "expressjs",
+    "express.js"
+  ],
+  "author": "George M Kroid <kroid@yandex.ru>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kroid/express-rest-generate/issues"
+  },
+  "homepage": "https://github.com/Kroid/express-rest-generate",
+  "dependencies": {
+    "express": "^4.4.0"
+  }
+}

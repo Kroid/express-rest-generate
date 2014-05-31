@@ -1,0 +1,26 @@
+{
+  "ctrlLastName": "Ctrl",
+  "path": "./example/controllers",
+  "requiredPath": true,
+  "actions": {
+    "list": {
+      "method": "get",
+      "appendUrl": "s"
+    },
+    "create": {
+      "method": "post"
+    },
+    "show": {
+      "method": "show",
+      "appendUrl": "/:id"
+    },
+    "update": {
+      "method": "update",
+      "appendUrl": "/:id"
+    },
+    "delete": {
+      "method": "delete",
+      "appendUrl": "/id"
+    }
+  }
+}
