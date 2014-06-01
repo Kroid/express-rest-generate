@@ -29,11 +29,8 @@ module.exports = function(conf) {
 
 
 
-  var struct = iterate(config.path);
-  //console.log(struct);
-  createRoutes(struct);
-  console.log(router);
-  //return router;
+  iterate(config.path);
+  return router;
 }
 
 
@@ -52,10 +49,18 @@ function iterate(path) {
     }
 
     if ( fs.statSync(path + '/' + name).isFile() ) {
+      routePath = path.slice(config.path.length);
       var endPos = name.lastIndexOf(config.ctrlLastName + '.js');
       if (endPos != -1 && endPos != 0) {
-        var ctrlName = name.slice(0, endPos).toLowerCase();
-        struct[ctrlName] = require(path + '/' + name);
+        var ctrl = require(path + '/' + name),
+            routeCtrlName = name.slice(0, endPos).toLowerCase();
+
+        if (!config.requiredPath) {
+          routePath = '/' + routeCtrlName;
+        } else {
+          routePath += '/' + routeCtrlName;
+        }
+        createRoutes(routePath, ctrl);
       }
     }
   }
@@ -65,42 +70,18 @@ function iterate(path) {
 
 
 
-function createRoutes(struct, currentPath) {
-  if (!currentPath) { currentPath = "" }
-
-  for (name in struct) {
-    var element = struct[name],
-        abcolutePath = config.path + '/' + currentPath + '/' + name
-
-    if ( fs.statSync(abcolutePath).isDirectory() ) {
-      createRoutes(element, currentPath + '/' + name);
-      continue;
-    }
-
-    if ( fs.statSync(abcolutePath).isFile ) {
-      checkActions(element, currentPath);
-    }
-  }
-}
-
-
-function checkActions(controller, currentPath) {
-  if (!config.requiredPath || !currentPath) {
-    currentPath = '';
-  }
-
+function createRoutes(url, ctrl) {
   for (actionName in config.actions) {
-    if (!controller[actionName]) {
+    if (!ctrl[actionName]) {
       continue;
     }
 
-    var action = config.actions[actionName],
-        path = currentPath + '/';
+    var action = config.actions[actionName];
 
     if (action.appendUrl) {
-      path += action.appendUrl;
+      url += action.appendUrl;
     }
 
-    router[action.method](path, controller[actionName]);
+    router[action.method](url, ctrl[actionName]);
   }
 }

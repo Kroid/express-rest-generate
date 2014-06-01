@@ -11,7 +11,7 @@
       "method": "post"
     },
     "show": {
-      "method": "show",
+      "method": "get",
       "appendUrl": "/:id"
     },
     "update": {
