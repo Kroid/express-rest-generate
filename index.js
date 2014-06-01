@@ -3,7 +3,7 @@ var router = require('express').Router(),
     config = {};
 
 
-module.exports = function(conf) {
+module.exports = function(rootDir, conf) {
   var defaultConfig = require('./defaultConfig.json');
 
   if(!conf) {
@@ -15,7 +15,9 @@ module.exports = function(conf) {
     }
 
     if (!config.path) {
-      config.path = defaultConfig.path;
+      config.path = rootDir + '/' + defaultConfig.path;
+    } else {
+      config.path = rootDir + '/' + config.path;
     }
 
     if (!config.requiredPath) {
@@ -70,13 +72,14 @@ function iterate(path) {
 
 
 
-function createRoutes(url, ctrl) {
+function createRoutes(path, ctrl) {
   for (actionName in config.actions) {
     if (!ctrl[actionName]) {
       continue;
     }
 
-    var action = config.actions[actionName];
+    var action = config.actions[actionName],
+        url = path;
 
     if (action.appendUrl) {
       url += action.appendUrl;
