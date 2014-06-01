@@ -1,6 +1,6 @@
 {
   "name": "express-rest-generate",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "generate REST routes from controllers for express.js",
   "main": "index.js",
   "scripts": {
