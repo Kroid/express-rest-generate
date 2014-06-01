@@ -8,6 +8,7 @@ module.exports = function(rootDir, conf) {
 
   if(!conf) {
     config = defaultConfig;
+    config.path = rootDir + '/' + config.path;
   } else {
     config = conf;
     if (!config.ctrlLastName) {
