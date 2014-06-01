@@ -4,41 +4,58 @@ express-rest-generate
 This module auto generate express routing by your controller's files.
 
 
-Example
--------
-Structure:
+Quick start:
+------
 ```
-controllers
-  api
-    CatCtrl.js
-  DogCtrl.js
-server.js
+npm install --save express-rest-generate
 ```
 
-in server.js:
-```
-var app = require('express')();
-var router = require('express-rest-generate')(__dirname);
+in express app file:
+```javascript
+var express = require('express'),
+    app = express();
 
-app.use('/', router);
-```
+var rest = require('express-rest-generate');
 
-our controller , for example controllers/api/CatCtrl.js:
-```
-module.exports = {
-  show: function(req, res) { res.send('api:CatCtrl => show ' + req.params.id) },
-  list: function(req, res) { res.send('api:CatCtrl => list') },
-  create: function(req, res) { res.send('api:CatCtrl => create') },
-  update: function(req, res) { res.send('api:CatCtrl => update') },
-  delete: function(req, res) { res.send('api:CatCtrl => delete') }
+var config = {
+  // directory with controller's files
+  path = './controllers',
+
+  // example controller name: UserCtrl.js
+  ctrlLastName: "Ctrl",
+
+  // true, if we need include controller's directory in routing
+  // example: ./controllers/api/PostCtrl.js
+  // convert to '/api/post'
+  requiredPath: true,
+
+  // override REST API
+  actions: {
+    // this action will convert to:
+    // router.get('/controllerName/:id', controllerObject.show)
+    show: {
+      method: 'get',
+      appendUrl: '/:id'
+    }
+  }
 }
+
+var router = rest(__dirname, config);
+// or        rest(__dirname);    for use default config (express-rest-generate/defaultConfig.json)
+
+app.use('/generated-routes', router);
+
+app.listen(3000, function() {
+  console.log('server started')
+});
+
 ```
 
-start server (node server.js) and send requests:
+in our controller file:
+```javascript
+module.exports = {
+  show: function(req, res) {
+    res.send('It is SHOW method in our controller. Id: ' + req.params.id);
+  }
+};
 ```
-list request:   GET /api/cats
-show request:   GET /api/cat/catName
-create request: POST /api/cat
-```
-
-express-rest-generate automatic parse our controllers with his actions and create express.Router object.
